@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0",
+  "contentVersion": "1.0.0",
+  "book": {
+    "title": "Buanthanh Lu",
+    "subtitle": "Rongmei Gospel Hymnal",
+    "language": "Rongmei"
+  },
+  "source": {
+    "file": "pdf/Buanthanh_Lu_interactive_home.pdf",
+    "pdfUrl": "",
+    "pages": 316,
+    "compiledBy": "Longjang Baptist Youth Fellowship, RBCC",
+    "year": 2026
+  },
+  "editorial": {
+    "status": "unverified",
+    "note": "Metadata is limited to information present in the supplied PDF. Hymn wording is preserved from the source extraction."
+  }
+}

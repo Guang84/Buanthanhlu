@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta content="#23483f" name="theme-color"/>
+  <meta content="Buanthanhlu, a digital Rongmei Gospel Hymnal." name="description"/>
+  <link href="manifest.webmanifest" rel="manifest"/>
+  <link href="https://raw.githubusercontent.com/Guang84/Guang84/refs/heads/main/static/icon/favicon.ico" rel="icon" type="image/x-icon"/>
+  <link href="css/main.css" rel="stylesheet"/>
+  <title>
+   Buanthlu | Rongmei Gospel Hymnal
+  </title>
+ </head>
+ <body data-page="home">
+  <header class="site-header">
+   <div class="shell header-inner">
+    <a class="brand" href="index.html">
+     <span class="brand-mark">
+      BL
+     </span>
+     <span>
+      <strong>
+       Buanthlu
+      </strong>
+      <small>
+       Rongmei Gospel Hymnal
+      </small>
+      <small class="header-tagline">
+       Sing, read, remember.
+      </small>
+     </span>
+    </a>
+    <nav aria-label="Primary">
+     <a aria-current="page" href="index.html">
+      Hymns
+     </a>
+     <a href="hymn.html?number=1">
+      Reader
+     </a>
+     <button aria-label="Toggle theme" class="icon-button" data-theme-toggle="" type="button">
+      ◐
+     </button>
+    </nav>
+   </div>
+  </header>
+  <main class="shell home-main">
+   <section class="intro">
+    <p class="eyebrow">
+     A digital companion
+    </p>
+    <h2>
+     Sing, read, remember.
+    </h2>
+    <p class="lede">
+     A searchable home for the Buanthanhlu Rongmei Gospel Hymnal.
+    </p>
+    <form class="search-form" data-search-form="" role="search">
+     <label class="sr-only" for="home-search">
+      Search hymns
+     </label>
+     <span class="search-icon">
+      &telrec;
+     </span>
+     <input autocomplete="off" data-search-input="" id="home-search" placeholder="Search by number, title, or lyrics" type="search"/>
+     <button aria-label="Clear search" class="clear-button" data-clear-search="" hidden="" type="button">
+      &times;
+     </button>
+    </form>
+    <div aria-live="polite" class="search-status" data-search-status="">
+    </div>
+    <div class="search-results" data-search-results="">
+    </div>
+    <div class="quick-actions">
+     <a class="button button-accent" href="hymn.html?random=1">
+      Random hymn
+      <span>
+       &nearrow;
+      </span>
+     </a>
+     <a class="button button-quiet" data-pdf-link="" href="pdf/Buanthanh_Lu_interactive_home.pdf">
+      Open digital PDF
+      <span>
+       &nearrow;
+      </span>
+     </a>
+     <button class="button button-quiet" data-open-settings="" type="button">
+      Reading settings
+      <span>
+       ⌘
+      </span>
+     </button>
+    </div>
+   </section>
+   <section class="continue-strip" data-continue-section="" hidden="">
+    <div>
+     <p class="eyebrow">
+      Continue reading
+     </p>
+     <h2 data-continue-title="">
+     </h2>
+    </div>
+    <a class="button button-accent" data-continue-link="" href="#">
+     Continue
+     <span>
+      &rarr;
+     </span>
+    </a>
+   </section>
+   <section class="index-section">
+    <div class="section-heading">
+     <div>
+      <p class="eyebrow">
+       The collection
+      </p>
+      <h2>
+       Hymn index
+      </h2>
+     </div>
+     <span class="count-pill" data-hymn-count="">
+      Loading
+     </span>
+    </div>
+    <div aria-label="Hymn number index" class="hymn-grid" data-hymn-index="">
+     <div class="loading-state">
+      Loading Buanthlu&hellip;
+     </div>
+    </div>
+   </section>
+   <div class="home-columns">
+    <section class="list-section">
+     <div class="section-heading">
+      <h2>
+       Recently viewed
+      </h2>
+     </div>
+     <div class="mini-list" data-history-list="">
+      <p class="empty-state">
+       No recently viewed hymns yet.
+      </p>
+     </div>
+    </section>
+    <section class="list-section">
+     <div class="section-heading">
+      <h2>
+       Favorites
+      </h2>
+     </div>
+     <div class="mini-list" data-favorites-list="">
+      <p class="empty-state">
+       No favorite hymns yet.
+      </p>
+     </div>
+    </section>
+   </div>
+  </main>
+  <footer class="site-footer">
+   <div class="shell footer-inner">
+    <span>
+     BUANTHANLU DIGITAL
+    </span>
+    <span>
+     Original hymnal rights remain with their respective holders.
+    </span>
+    <a data-profile-link="" href="https://github.com/Guang84/Buanthanhlu">
+     DEV Github
+    </a>
+    <span>
+     Editor:
+     <span data-profile-name="">
+      Naingam Pamei
+     </span>
+    </span>
+    <a data-feedback="" href="https://github.com/Guang84/Buanthanhlu/issues/new">
+     Send feedback
+    </a>
+    <a data-correction="" href="https://github.com/Guang84/Buanthanhlu/issues/new?labels=correction">
+     Report correction
+    </a>
+    <a data-whatsapp="" href="#">
+     Chat with editor
+    </a>
+    <a href="policy.html">
+     Usage policy
+    </a>
+   </div>
+  </footer>
+  <dialog data-settings-dialog="">
+   <form class="settings-panel" method="dialog">
+    <div class="dialog-heading">
+     <div>
+      <p class="eyebrow">
+       Personalize
+      </p>
+      <h2>
+       Reading settings
+      </h2>
+     </div>
+     <button aria-label="Close settings" class="icon-button" value="cancel">
+      &times;
+     </button>
+    </div>
+    <label>
+     Font size
+     <output data-font-output="">
+      18px
+     </output>
+     <input data-font-setting="" max="24" min="16" type="range" value="18"/>
+    </label>
+    <label>
+     Line spacing
+     <select data-spacing-setting="">
+      <option value="normal">
+       Normal
+      </option>
+      <option value="relaxed">
+       Relaxed
+      </option>
+      <option value="large">
+       Large
+      </option>
+     </select>
+    </label>
+    <label>
+     Reading width
+     <select data-width-setting="">
+      <option value="narrow">
+       Narrow
+      </option>
+      <option value="normal">
+       Normal
+      </option>
+      <option value="wide">
+       Wide
+      </option>
+     </select>
+    </label>
+    <label>
+     Theme
+     <select data-theme-setting="">
+      <option value="system">
+       System
+      </option>
+      <option value="light">
+       Light
+      </option>
+      <option value="dark">
+       Dark
+      </option>
+     </select>
+    </label>
+   </form>
+  </dialog>
+  <div class="update-banner" data-update="" hidden="" role="status">
+   A newer version is available.
+   <button type="button">
+    Refresh
+   </button>
+  </div>
+  <div aria-live="polite" class="toast" data-toast="" role="status">
+  </div>
+  <script src="js/app.js" type="module">
+  </script>
+ </body>
+</html>
+

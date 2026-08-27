@@ -1,0 +1,15 @@
+{
+  "name": "Buanthlu | Rongmei Gospel Hymnal",
+  "short_name": "Buanthlu",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#23483f",
+  "background_color": "#f4f0e8",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/Guang84/Guang84/refs/heads/main/static/icon/favicon.ico",
+      "sizes": "16x16 32x32",
+      "type": "image/x-icon"
+    }
+  ]
+}
