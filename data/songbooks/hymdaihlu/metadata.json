@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "contentVersion": "1.0.0",
+  "contentVersion": "1.1.0",
   "id": "hymdaihlu",
   "name": "hymdaihlu",
   "title": "Hymdaihlu",
@@ -27,6 +27,10 @@
     "rights": "Song and image rights remain with their respective authors, translators, compilers, publishers, and rights holders. Import does not change ownership."
   },
   "changelog": [
+    {
+      "date": "2026-08-31",
+      "note": "Replaced English database titles with verified RongmeiIndexes titles, preserved alternate Rongmei titles for search, and aligned catalog numbers with source pages."
+    },
     {
       "date": "2026-08-31",
       "note": "Imported 930 records from two source book types; duplicate source numbering is preserved in metadata while app catalog numbers remain unique."

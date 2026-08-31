@@ -13,7 +13,7 @@ The current release is an installable Progressive Web App (PWA) designed for pho
 
 ## Hymdaihlu import
 
-The Hymdaihlu collection contains 930 songs extracted from the supplied `hymnal_1_2_3.db` SQLite database. Run `python3 tools/extract_hymdaihlu.py` to regenerate its formatted JSON. The importer removes fixed-width padding, converts HTML breaks and entities, repairs known legacy punctuation encoding, preserves source book/hymn references and musical metadata, and assigns collision-free app catalog numbers.
+The Hymdaihlu collection contains 930 songs extracted from the supplied `hymnal_1_2_3.db` SQLite database. Run `python3 tools/extract_hymdaihlu.py` to regenerate its formatted JSON. The importer uses `RongmeiIndexes.Title` rather than the English `Hymns.Title`, retains alternate Rongmei index entries for search, removes fixed-width padding, converts HTML breaks and entities, repairs known legacy punctuation encoding, and preserves musical metadata. Type-1 catalog numbers follow Rongmei `PageNo`; the duplicate source record is isolated at 730, followed by type-2 songs at 731–930.
 - Read songs in a focused, adjustable layout.
 - Save favorites and reading history per book.
 - Use large-screen presentation mode in either light or dark theme; exit with the on-screen control or `Escape`.
