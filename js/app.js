@@ -470,7 +470,10 @@ function initServiceWorker() {
     registration.update().catch(error => console.warn('Service worker update check failed', error));
   }).catch(error => console.warn('Service worker registration failed', error));
   navigator.serviceWorker.addEventListener('message', event => {
-    if (event.data?.type === 'NETWORK_ERROR') toast('You are offline; this item is not saved yet.');
+    if (event.data?.type === 'NETWORK_ERROR') {
+      if (!navigator.onLine) toast('You are offline; this item is not saved yet.');
+      else console.warn(`A background request failed while online: ${event.data.url || 'unknown resource'}`);
+    }
     if (event.data?.type === 'CACHE_WARNING') console.warn(`${event.data.count} app files could not be saved for offline use.`);
   });
 }
