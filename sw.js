@@ -1,4 +1,4 @@
-const CACHE = 'rongmei-songbooks-v8';
+const CACHE = 'rongmei-songbooks-v9';
 const DOWNLOAD_CACHE = 'rongmei-songbooks-downloads-v1';
 const SHELL = ['./', './index.html', './book.html', './hymn.html', './404.html', './policy.html', './css/main.css', './js/app.js', './js/data.js', './js/storage.js', './js/ui.js', './js/settings.js', './js/contact.js', './js/offline.js', './data/songbooks/index.json', './data/contact.json', './assets/Rongmei%20Gospel%20song%20books.png', './assets/buanthanhlu-cover.png', './assets/icons/icon.svg', './assets/icons/icon-192.png', './assets/icons/icon-512.png', './manifest.webmanifest'];
 
