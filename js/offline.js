@@ -2,6 +2,7 @@ import { toast } from './ui.js';
 
 const $ = selector => document.querySelector(selector);
 let installPrompt;
+let activeWorker;
 
 function setStatus(message, state = '') {
   const node = $('[data-offline-status]');
@@ -19,7 +20,7 @@ async function updateStorageEstimate() {
 }
 
 function sendToWorker(message) {
-  const worker = navigator.serviceWorker?.controller;
+  const worker = navigator.serviceWorker?.controller || activeWorker;
   if (!worker) {
     setStatus('Offline setup will be ready after the app finishes starting.');
     return false;
@@ -35,6 +36,7 @@ export function initOfflineLibrary() {
   const remove = $('[data-remove-offline]');
   const install = $('[data-install-app]');
   const progress = $('[data-offline-progress]');
+  download.disabled = true;
 
   window.addEventListener('beforeinstallprompt', event => {
     event.preventDefault();
@@ -72,14 +74,15 @@ export function initOfflineLibrary() {
     if (data.type === 'OFFLINE_COMPLETE') {
       download.disabled = false;
       progress.hidden = true;
-      remove.hidden = data.failed === data.total;
-      setStatus(data.failed ? `Saved with ${data.failed} item(s) unavailable. Try again when connected.` : 'Offline library is ready. Songs and app features will work without internet.', data.failed ? 'warning' : 'ready');
+      remove.hidden = !data.completed;
+      const errorMessage = data.error || (data.failed ? `Saved with ${data.failed} item(s) unavailable. Try again when connected.` : '');
+      setStatus(errorMessage || `Offline library is ready. ${data.books} songbooks and all app features will work without internet.`, errorMessage ? 'warning' : 'ready');
       toast(data.failed ? 'Offline download partly completed' : 'Offline library downloaded');
       updateStorageEstimate();
     }
     if (data.type === 'OFFLINE_STATUS') {
-      remove.hidden = !data.downloaded;
-      setStatus(data.downloaded ? `Offline library saved on this device (${data.count} files).` : 'Download once, then read and search songs without internet.', data.downloaded ? 'ready' : '');
+      remove.hidden = !data.count;
+      setStatus(data.downloaded ? `Offline library ready: ${data.books} songbooks and ${data.count} app files saved on this device.` : data.count ? `Offline download is incomplete (${data.count} of ${data.total} files). Connect to the internet and download again.` : 'Download once, then read and search songs without internet.', data.downloaded ? 'ready' : data.count ? 'warning' : '');
     }
     if (data.type === 'OFFLINE_CLEARED') {
       remove.hidden = true;
@@ -88,7 +91,9 @@ export function initOfflineLibrary() {
       updateStorageEstimate();
     }
   });
-  navigator.serviceWorker.ready.then(() => {
+  navigator.serviceWorker.ready.then(registration => {
+    activeWorker = registration.active;
+    download.disabled = false;
     sendToWorker({ type: 'GET_OFFLINE_STATUS' });
     updateStorageEstimate();
   });

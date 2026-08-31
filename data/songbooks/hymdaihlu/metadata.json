@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "contentVersion": "1.0.0",
+  "id": "hymdaihlu",
+  "name": "hymdaihlu",
+  "title": "Hymdaihlu",
+  "subtitle": "Rongmei hymns from the legacy digital edition",
+  "language": "Rongmei",
+  "cover": {
+    "image": "assets/hymdaihlu-cover.webp",
+    "alt": "Illustrated Hymdaihlu cover with a lantern, hymnbook, and mountain dawn"
+  },
+  "icon": "data/songbooks/hymdaihlu/icon.png",
+  "theme": {
+    "accent": "#8a5a32",
+    "accentSoft": "#dfc3a4"
+  },
+  "intro": {
+    "summary": "A large Rongmei hymn collection imported from the Hymdaihlu legacy song database.",
+    "description": "Browse and search 930 imported hymns. Source book and hymn numbers, tune details, meter, chords, and author information are retained as searchable metadata when present."
+  },
+  "credits": {
+    "editor": "Hymdaihlu legacy database contributors",
+    "compiledBy": "Imported from hymnal_1_2_3.db",
+    "publisher": "Source publisher not recorded in the database",
+    "year": "Legacy digital edition",
+    "rights": "Song and image rights remain with their respective authors, translators, compilers, publishers, and rights holders. Import does not change ownership."
+  },
+  "changelog": [
+    {
+      "date": "2026-08-31",
+      "note": "Imported 930 records from two source book types; duplicate source numbering is preserved in metadata while app catalog numbers remain unique."
+    }
+  ],
+  "songs": {
+    "file": "songs.json",
+    "url": "",
+    "count": 930,
+    "updatedAt": "2026-08-31"
+  }
+}

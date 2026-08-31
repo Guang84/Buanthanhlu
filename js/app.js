@@ -42,6 +42,13 @@ function applyBookTheme(book) {
   else document.documentElement.style.removeProperty('--book-accent');
   if (accentSoft) document.documentElement.style.setProperty('--book-accent-soft', accentSoft);
   else document.documentElement.style.removeProperty('--book-accent-soft');
+  if (book?.iconImage) {
+    const favicon = document.querySelector('link[rel="icon"]');
+    if (favicon) {
+      favicon.href = book.iconImage;
+      favicon.type = 'image/png';
+    }
+  }
 }
 
 function renderAppDetails() {
@@ -75,6 +82,12 @@ function renderBookList() {
     image.src = book.coverImage || 'assets/Rongmei Gospel song books.png';
     image.alt = book.coverImageAlt || `Cover of ${book.title}`;
     const content = createElement('span', 'book-card-content');
+    if (book.iconImage) {
+      const icon = createElement('img', 'book-card-icon');
+      icon.src = book.iconImage;
+      icon.alt = '';
+      content.append(icon);
+    }
     content.append(
       createElement('span', 'book-card-label', 'Songbook'),
       createElement('strong', '', book.title),
@@ -450,15 +463,31 @@ async function init() {
 function initServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   navigator.serviceWorker.register('sw.js').then(registration => {
+    let updateScheduled = false;
+    const checkForUpdates = async () => {
+      if (!navigator.onLine) return;
+      try {
+        await registration.update();
+        const worker = navigator.serviceWorker.controller || registration.active;
+        worker?.postMessage({ type: 'REFRESH_LIBRARY' });
+      } catch (error) {
+        console.warn('Online update check failed', error);
+      }
+    };
     const reloadForUpdate = () => {
       navigator.serviceWorker.addEventListener('controllerchange', () => location.reload(), { once: true });
       registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
     };
     const showUpdate = () => {
+      if (updateScheduled) return;
+      updateScheduled = true;
       const node = $('[data-update]');
-      if (!node) return;
-      node.hidden = false;
-      node.querySelector('button')?.addEventListener('click', reloadForUpdate, { once: true });
+      if (node) {
+        node.firstChild.textContent = 'A newer version is ready. Refreshing…';
+        node.hidden = false;
+        node.querySelector('button')?.addEventListener('click', reloadForUpdate, { once: true });
+      }
+      setTimeout(reloadForUpdate, 500);
     };
     if (registration.waiting) showUpdate();
     registration.addEventListener('updatefound', () => {
@@ -467,13 +496,19 @@ function initServiceWorker() {
         if (worker.state === 'installed' && navigator.serviceWorker.controller) showUpdate();
       });
     });
-    registration.update().catch(error => console.warn('Service worker update check failed', error));
+    checkForUpdates();
+    window.addEventListener('online', checkForUpdates);
   }).catch(error => console.warn('Service worker registration failed', error));
   navigator.serviceWorker.addEventListener('message', event => {
     if (event.data?.type === 'NETWORK_ERROR') {
       if (!navigator.onLine) toast('You are offline; this item is not saved yet.');
       else console.warn(`A background request failed while online: ${event.data.url || 'unknown resource'}`);
     }
+    if (event.data?.type === 'LIBRARY_UPDATED') {
+      toast('New library content found. Refreshing…');
+      setTimeout(() => location.reload(), 500);
+    }
+    if (event.data?.type === 'LIBRARY_REFRESH_FAILED' && navigator.onLine) console.warn(`Library refresh failed: ${event.data.message || 'unknown error'}`);
     if (event.data?.type === 'CACHE_WARNING') console.warn(`${event.data.count} app files could not be saved for offline use.`);
   });
 }

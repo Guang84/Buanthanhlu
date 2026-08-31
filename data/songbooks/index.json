@@ -18,11 +18,18 @@
       "songCount": 305
     },
     {
-      "id": "gospel-songs",
-      "directory": "gospel-songs",
+      "id": "hymdaihlu",
+      "directory": "hymdaihlu",
+      "metadata": "metadata.json",
+      "version": "1.0.0",
+      "songCount": 930
+    },
+    {
+      "id": "vbs-songs",
+      "directory": "vbs-songs",
       "metadata": "metadata.json",
       "version": "1.1.0",
-      "songCount": 2
+      "songCount": 36
     }
   ]
 }

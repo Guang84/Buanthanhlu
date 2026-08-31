@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "contentVersion": "1.1.0",
+  "id": "vbs-songs",
+  "name": "vbs-songs",
+  "title": "VBS Songs",
+  "subtitle": "English songs for children and group worship",
+  "language": "English",
+  "cover": {
+    "image": "assets/vbs-songs-cover.webp",
+    "alt": "Illustrated VBS Songs cover with children singing around an open Bible"
+  },
+  "theme": {
+    "accent": "#b06b22",
+    "accentSoft": "#f1d6a8"
+  },
+  "intro": {
+    "summary": "A growing collection of public-domain English hymns and traditional spirituals suitable for Vacation Bible School, Sunday school, and group singing.",
+    "description": "Sing familiar songs about faith, creation, joy, courage, and the life of Jesus. This edition intentionally includes only older public-domain texts and traditional songs with no known modern lyric additions."
+  },
+  "credits": {
+    "editor": "Rongmei Hymnal Editorial Team",
+    "compiledBy": "Public-domain children’s hymn and spiritual sources",
+    "publisher": "Rongmei Hymnal",
+    "year": "2026",
+    "rights": "Included texts are public-domain hymns or traditional spirituals. Modern arrangements, recordings, and later lyric additions may have separate rights."
+  },
+  "changelog": [
+    {
+      "date": "2026-08-31",
+      "note": "Expanded to 36 songs with child-friendly mission songs and adult congregational hymns for mixed-age VBS worship."
+    },
+    {
+      "date": "2026-08-31",
+      "note": "First edition with eighteen public-domain English songs for children and group worship."
+    }
+  ],
+  "songs": {
+    "file": "songs.json",
+    "url": "",
+    "count": 36,
+    "updatedAt": "2026-08-31"
+  }
+}

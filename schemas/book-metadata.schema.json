@@ -17,6 +17,7 @@
       "required": ["image", "alt"],
       "properties": {"image": {"type": "string", "minLength": 1}, "alt": {"type": "string", "minLength": 1}}
     },
+    "icon": {"type": "string", "minLength": 1},
     "theme": {
       "type": "object",
       "properties": {"accent": {"type": "string", "pattern": "^#[0-9A-Fa-f]{3,8}$"}, "accentSoft": {"type": "string", "pattern": "^#[0-9A-Fa-f]{3,8}$"}}

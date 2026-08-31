@@ -34,6 +34,7 @@ async function loadBookMetadata(entry) {
     ...data,
     coverImage: data.cover?.image || '',
     coverImageAlt: data.cover?.alt || `Cover of ${data.title}`,
+    iconImage: data.icon || '',
     songCount: Number.isInteger(entry.songCount) ? entry.songCount : data.songs?.count,
     updatedAt: data.songs?.updatedAt || '—'
   };
