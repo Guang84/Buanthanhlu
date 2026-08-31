@@ -1,7 +1,7 @@
 # Rongmei Hymnal
 
 Rongmei Hymnal is a searchable digital library of Rongmei gospel songbooks, created for worship, learning, and community singing. Each collection keeps its own identity, credits, sources, and rights information.
-*Link* : https://guang84.github.io/RongmeiHymnal/
+- *Link* : https://guang84.github.io/RongmeiHymnal/
 ## Upgraded offline-first version
 
 The current release is an installable Progressive Web App (PWA) designed for phones, tablets, and computers. It adds explicit full-library downloads, persistent device storage where the browser permits it, installation-ready PNG icons, storage and download status, and light and dark presentation modes. The home-page brand now uses the application icon.
