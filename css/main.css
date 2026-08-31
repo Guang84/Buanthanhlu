@@ -111,6 +111,18 @@ body.dark {
   letter-spacing: .05em
 }
 
+.brand-mark-image {
+  overflow: hidden;
+  background: transparent
+}
+
+.brand-mark-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover
+}
+
 nav {
   display: flex;
   align-items: center;
@@ -992,13 +1004,24 @@ body.dark { --accent: var(--book-accent, #dc8061) }
 }
 
 body.presentation-mode {
-  --bg: #17221f;
+  --bg: #f4f0e8;
+  --surface: #fffdf8;
+  --reader: #fffdf8;
+  --ink: #17221f;
+  --muted: #66716b;
+  --line: #cfd4cc;
+  background: var(--bg);
+  color-scheme: light
+}
+
+body.dark.presentation-mode {
+  --bg: #101a17;
   --surface: #17221f;
   --reader: #17221f;
   --ink: #f8f0e2;
-  --muted: #d5dfd5;
+  --muted: #c4d0c8;
   --line: #4d665d;
-  background: #17221f;
+  background: var(--bg);
   color-scheme: dark
 }
 
@@ -1008,12 +1031,16 @@ body.presentation-mode .reader-toolbar,
 body.presentation-mode .reader-nav { display: none }
 body.presentation-mode .reader-main { width: min(100% - 48px, 1500px); padding: 7vh 0 }
 body.presentation-mode .reader { max-width: none; margin: 0; padding: clamp(28px, 6vw, 80px); background: transparent; box-shadow: none }
+body.presentation-mode .reader-heading { border-color: var(--line) }
 body.presentation-mode .reader-heading { margin-bottom: clamp(32px, 5vw, 70px) }
 body.presentation-mode .reader-heading h1 { font-size: clamp(2.4rem, 5vw, 5.6rem) }
 body.presentation-mode .lyrics { gap: clamp(30px, 5vw, 64px); font-size: clamp(1.45rem, 3.1vw, 3.2rem); line-height: 1.5 }
 body.presentation-mode .song-section { gap: 7px }
-body.presentation-mode .song-section--chorus { padding: clamp(18px, 3vw, 38px); border-left-width: 5px }
+body.presentation-mode .song-section--chorus { padding: clamp(18px, 3vw, 38px); border-left-width: 5px; background: color-mix(in srgb, var(--accent) 10%, transparent) }
 body.presentation-mode .verification-note { color: var(--muted) }
+.presentation-exit { display: none }
+body.presentation-mode .presentation-exit { position: fixed; display: block; z-index: 10; top: 16px; right: 16px; min-height: 44px; border: 1px solid var(--line); border-radius: 999px; padding: 8px 15px; background: color-mix(in srgb, var(--surface) 90%, transparent); color: var(--ink); box-shadow: var(--shadow); cursor: pointer; font: 700 .76rem 'DM Sans', sans-serif; backdrop-filter: blur(10px) }
+body.presentation-mode .presentation-exit:hover { border-color: var(--accent); color: var(--accent) }
 
 @media(max-width:700px) {
   .library-search { padding-top: 47px }
@@ -1146,6 +1173,15 @@ body.presentation-mode .verification-note { color: var(--muted) }
 .library-hero-image img { position: relative; z-index: 1; display: block; width: 100%; aspect-ratio: 1054 / 1492; object-fit: cover; box-shadow: 0 28px 46px #263d3240 }
 
 .songbooks-home { padding: 92px 0 105px }
+.offline-library { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 36px; align-items: center; margin-top: 72px; padding: 34px; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 16px 35px #263d3210 }
+.offline-library h2 { margin: 0 0 10px; font: 500 clamp(2rem, 4vw, 3.4rem)/1 Newsreader, serif }
+.offline-library p { max-width: 700px; color: var(--muted) }
+.offline-actions { display: flex; flex-wrap: wrap; justify-content: end; gap: 9px }
+.offline-status { margin-bottom: 4px; color: var(--ink) !important; font-weight: 700 }
+.offline-status[data-state="ready"] { color: var(--green) !important }
+.offline-status[data-state="warning"] { color: #9a531e !important }
+.storage-estimate { margin: 0; font-size: .76rem }
+.offline-library progress { width: min(100%, 520px); height: 8px; margin-top: 14px; accent-color: var(--accent) }
 .book-gallery-heading { align-items: end; margin-bottom: 28px }
 .book-gallery { grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 19px; margin-top: 0 }
 .book-gallery .book-card { display: grid; grid-template-columns: 108px minmax(0, 1fr); gap: 0; min-height: 255px; padding: 0; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 16px 30px #263d3210; transform: none }
@@ -1201,6 +1237,8 @@ body.presentation-mode .verification-note { color: var(--muted) }
 .book-footer .text-link { color: var(--accent); white-space: nowrap }
 
 @media(max-width:700px) {
+  .offline-library { grid-template-columns: 1fr; margin-top: 42px; padding: 25px 20px; gap: 20px }
+  .offline-actions { justify-content: start }
   .library-hero-inner { grid-template-columns: 1fr; gap: 38px; min-height: auto; padding: 54px 0 }
   .library-hero-copy h1 { font-size: clamp(3.2rem, 14vw, 5.2rem) }
   .library-hero-image { justify-self: start; width: min(67vw, 315px); margin-left: 16px }

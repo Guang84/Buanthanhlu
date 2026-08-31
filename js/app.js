@@ -19,6 +19,7 @@ import {
 import { addHistory, getFavorites, getHistory, toggleFavorite } from './storage.js';
 import { $, renderMiniLists, toast } from './ui.js';
 import { initSettings } from './settings.js';
+import { initOfflineLibrary } from './offline.js';
 
 const PAGE_SIZE = 60;
 let catalogSongs = [];
@@ -313,13 +314,20 @@ function renderLyrics(song) {
 
 function initPresentationMode() {
   const button = $('[data-presentation-button]');
+  const exitButton = $('[data-presentation-exit]');
   if (!button) return;
-  const toggle = () => {
-    const enabled = document.body.classList.toggle('presentation-mode');
+  const toggle = force => {
+    const enabled = typeof force === 'boolean' ? force : !document.body.classList.contains('presentation-mode');
+    document.body.classList.toggle('presentation-mode', enabled);
     button.setAttribute('aria-pressed', String(enabled));
     button.textContent = enabled ? 'Exit presentation' : 'Present';
+    exitButton?.setAttribute('aria-hidden', String(!enabled));
   };
   button.addEventListener('click', toggle);
+  exitButton?.addEventListener('click', () => toggle(false));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && document.body.classList.contains('presentation-mode')) toggle(false);
+  });
   return toggle;
 }
 
@@ -424,6 +432,7 @@ function renderLoadError(error) {
 
 async function init() {
   initSettings();
+  initOfflineLibrary();
   initKeys();
   try {
     await loadLibrary();
