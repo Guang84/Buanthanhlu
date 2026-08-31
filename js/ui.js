@@ -1,5 +1,6 @@
 import {
   buildHymnURL,
+  getActiveBook,
   getHymnById
 } from './data.js';
 import {
@@ -21,9 +22,13 @@ export function renderMiniLists() {
     const node = $(selector);
     if (!node) return;
     node.replaceChildren();
-    const hymns = ids.map(getHymnById).filter(Boolean);
+    const bookId = getActiveBook()?.id;
+    const hymns = ids
+      .filter(id => id.startsWith(`${bookId}:`))
+      .map(id => getHymnById(id.slice(bookId.length + 1)))
+      .filter(Boolean);
     if (!hymns.length) {
-      node.innerHTML = '<p class="empty-state">No ' + (selector.includes('favorites') ? 'favorite' : 'recently viewed') + ' hymns yet.</p>';
+      node.innerHTML = '<p class="empty-state">No ' + (selector.includes('favorites') ? 'favorite' : 'recently viewed') + ' songs yet.</p>';
       continue
     }
     hymns.forEach(hymn => {

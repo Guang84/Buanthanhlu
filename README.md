@@ -1,31 +1,34 @@
-# Buanthlu Digital
+# Rongmei Hymnal
 
-Digital access to the Buanthlu Rongmei Gospel Hymnal.
-
-## About
-
-This is a static web application for reading and finding hymns. It has no
-backend, database, authentication, or external application server. The site
-is designed for GitHub Pages and uses HTML, CSS, JavaScript, and JSON.
-
-The original hymnal content remains the property of its original authors,
-compilers, publishers, churches, organizations, or other rights holders. The
-MIT License applies to the software in this repository and does not grant
-rights to redistribute the underlying hymnal content.
+Rongmei Hymnal is a searchable digital library of Rongmei gospel songbooks, created for worship, learning, and community singing. Each collection keeps its own identity, credits, sources, and rights information.
 
 ## Features
 
-- 305 hymns loaded from `data/hymns.json`
-- Number index with explicit hymn-number and stable-ID mapping
-- Direct reader URLs such as `hymn.html?number=146`
-- Search by hymn number, title, lyrics, and keywords
-- Previous, next, home, and random hymn navigation
-- Favorites and recently viewed hymns stored locally in the browser
-- Continue reading, font size, line spacing, reading width, and themes
-- Keyboard controls for search, home, favorite, previous, and next
-- Share, print, responsive phone/tablet layout, and invalid-route handling
-- Progressive Web App shell with versioned offline caching
+- Search across all available songbooks.
+- Read songs in a focused, adjustable layout.
+- Save favorites and reading history per book.
+- Use presentation mode for group singing.
+- Install the app and access local collections offline.
 
-## Feedback and Corrections
- The public application cannot edit or publish hymns. Submit
-content concerns for review through GitHub issues or the editor contact.
+## Run locally
+
+```sh
+python3 -m http.server 8000
+```
+
+Open <http://localhost:8000>.
+
+## Validation
+
+```sh
+python3 tools/build_book_index.py
+python3 tools/validator/validate.py
+```
+
+## Documentation
+
+See [Project Documentation](docs/PROJECT_DOCUMENTATION.md) for the architecture, songbook data format, publishing workflow, validation rules, and offline behavior.
+
+## Rights
+
+The MIT License applies to the project software, interface, tools, and documentation only. Song lyrics, editions, arrangements, cover art, and other content remain subject to their respective owners' rights. See [LICENSE](LICENSE) and the [Usage Policy](policy.html).

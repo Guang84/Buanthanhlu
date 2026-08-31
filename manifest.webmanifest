@@ -1,15 +1,22 @@
 {
-  "name": "Buanthlu | Rongmei Gospel Hymnal",
-  "short_name": "Buanthlu",
+  "name": "Rongmei Hymnal",
+  "short_name": "Rongmei Hymnal",
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#23483f",
+  "theme_color": "#f4f0e8",
   "background_color": "#f4f0e8",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/Guang84/Guang84/refs/heads/main/static/icon/favicon.ico",
-      "sizes": "16x16 32x32",
-      "type": "image/x-icon"
+      "src": "assets/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }

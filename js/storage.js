@@ -1,7 +1,7 @@
 const KEYS = {
-  favorites: 'buanthlu:favorites',
-  history: 'buanthlu:history',
-  settings: 'buanthlu:settings'
+  favorites: 'rongmei-songbooks:favorites',
+  history: 'rongmei-songbooks:history',
+  settings: 'rongmei-songbooks:settings'
 };
 
 function read(key, fallback) {
@@ -37,15 +37,20 @@ export function addHistory(id) {
   write(KEYS.history, [id, ...getHistory().filter(value => value !== id)].slice(0, 10))
 }
 export function getSettings() {
-  return {
+  const settings = {
     ...{
       font: 18,
       spacing: 'normal',
       width: 'normal',
-      theme: 'system'
+      // A songbook should open like a page, regardless of the device theme.
+      theme: 'light',
+      tone: 'forest'
     },
     ...read(KEYS.settings, {})
-  }
+  };
+  // Preserve older settings without allowing a device theme to override reading mode.
+  if (settings.theme === 'system') settings.theme = 'light';
+  return settings
 }
 export function saveSettings(settings) {
   write(KEYS.settings, settings)

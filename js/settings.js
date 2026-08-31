@@ -2,7 +2,6 @@ import {
   getSettings,
   saveSettings
 } from './storage.js';
-import './reader-fix.js';
 import './contact.js';
 import {
   $
@@ -10,17 +9,19 @@ import {
 let settings = getSettings();
 
 function apply() {
-  document.body.classList.toggle('dark', settings.theme === 'dark' || (settings.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches));
+  document.body.classList.toggle('dark', settings.theme === 'dark');
   document.documentElement.style.setProperty('--reader-size', `${settings.font}px`);
   document.documentElement.dataset.spacing = settings.spacing;
   document.documentElement.dataset.width = settings.width;
+  document.documentElement.dataset.tone = settings.tone;
   const output = $('[data-font-output]');
   if (output) output.textContent = `${settings.font}px`;
   for (const [selector, key] of [
       ['[data-font-setting]', 'font'],
       ['[data-spacing-setting]', 'spacing'],
       ['[data-width-setting]', 'width'],
-      ['[data-theme-setting]', 'theme']
+      ['[data-theme-setting]', 'theme'],
+      ['[data-tone-setting]', 'tone']
     ]) {
     const node = $(selector);
     if (node) node.value = settings[key]
@@ -34,7 +35,8 @@ export function initSettings() {
       ['[data-font-setting]', 'font'],
       ['[data-spacing-setting]', 'spacing'],
       ['[data-width-setting]', 'width'],
-      ['[data-theme-setting]', 'theme']
+      ['[data-theme-setting]', 'theme'],
+      ['[data-tone-setting]', 'tone']
     ]) {
     const node = $(selector);
     if (node) node.addEventListener('input', () => {

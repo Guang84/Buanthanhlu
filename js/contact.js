@@ -1,5 +1,6 @@
 const fallback = {
   editor: 'Project editor',
+  feedbackEmail: '',
   githubProfile: '',
   whatsappNumber: '',
   whatsappMessage: '',
@@ -37,7 +38,7 @@ async function loadContact() {
     }
   });
   document.querySelectorAll('[data-feedback]').forEach(node => {
-    if (contact.issuesURL) node.href = `${contact.issuesURL}/new`;
+    if (contact.feedbackEmail) node.href = `mailto:${contact.feedbackEmail}`;
   });
   document.querySelectorAll('[data-correction]').forEach(node => {
     if (contact.issuesURL) node.href = `${contact.issuesURL}/new?labels=correction`;
@@ -46,7 +47,7 @@ async function loadContact() {
   if (footer && !footer.querySelector('[data-feedback]')) {
     const links = [
       [`GitHub · ${contact.editor}`, contact.githubProfile],
-      ['Send feedback', contact.issuesURL ? `${contact.issuesURL}/new` : ''],
+      ['Send feedback', contact.feedbackEmail ? `mailto:${contact.feedbackEmail}` : ''],
       ['Report correction', contact.issuesURL ? `${contact.issuesURL}/new?labels=correction` : ''],
       ['Chat with editor', whatsapp],
       ['Usage policy', 'policy.html']

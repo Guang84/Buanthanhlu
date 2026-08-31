@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "contentVersion": "2.1.0",
+  "id": "buanthanhlu",
+  "name": "buanthanhlu",
+  "title": "Buanthanhlu",
+  "subtitle": "Rongmei Gospel Hymnal",
+  "language": "Rongmei",
+  "cover": {
+    "image": "assets/buanthlu-cover.png",
+    "alt": "Cover of the Buanthanhlu Rongmei Gospel Hymnal"
+  },
+  "theme": {
+    "accent": "#9d4f35",
+    "accentSoft": "#e9c8b6"
+  },
+  "intro": {
+    "summary": "A collection of Rongmei gospel hymns for worship, remembrance, and community singing.",
+    "description": "Browse the full songbook alphabetically, search lyrics, and read each song in a focused, adjustable layout."
+  },
+  "credits": {
+    "editor": "Naingam Pamei",
+    "compiledBy": "Longjang Baptist Youth Fellowship, RBCC",
+    "publisher": "Longjang Baptist Youth Fellowship, RBCC",
+    "year": "2026",
+    "rights": "Original song rights remain with their respective authors and rights holders."
+  },
+  "changelog": [
+    {
+      "date": "2026-08-31",
+      "note": "Reader sections, presentation mode, accessibility, and a paginated song catalog added without changing reviewed song text."
+    },
+    {
+      "date": "2026-08-30",
+      "note": "Multi-songbook edition and book-specific editorial credits introduced."
+    }
+  ],
+  "songs": {
+    "file": "songs.json",
+    "url": "",
+    "count": 305,
+    "updatedAt": "2026-08-31"
+  }
+}

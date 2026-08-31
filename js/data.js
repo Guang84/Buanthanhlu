@@ -1,47 +1,218 @@
-const DATA_URL = 'data/hymns.json';
+const LIBRARY_URL = 'data/songbooks/index.json';
+
+let library = null;
+let activeBook = null;
 let records = [];
 let searchIndex = [];
+const bookSongCache = new Map();
+
 const normalize = value => String(value ?? '').normalize('NFKC').toLocaleLowerCase().replace(/\s+/g, ' ').trim();
-export async function loadHymns() {
-  if (records.length) return records;
-  const metadataResponse = await fetch('data/metadata.json', {
-    cache: 'no-store'
-  });
-  if (!metadataResponse.ok) throw new Error('metadata');
-  const metadata = await metadataResponse.json();
-  const version = encodeURIComponent(metadata.contentVersion || 'latest');
-  const response = await fetch(`${DATA_URL}?v=${version}`, {
-    cache: 'no-store'
-  });
-  if (!response.ok) throw new Error('data');
-  const data = await response.json();
-  validateData(data);
-  records = [...data.hymns].sort((a, b) => a.number - b.number);
-  searchIndex = records.map(hymn => ({
-    hymn,
-    number: String(hymn.number),
-    searchableText: normalize([hymn.number, hymn.title, hymn.content?.lines?.join(' '), ...(hymn.search?.keywords || [])].join(' '))
-  }));
+const safeDirectory = value => typeof value === 'string' && /^[a-z0-9][a-z0-9-]*$/i.test(value);
+const safeFile = value => typeof value === 'string' && /^[a-z0-9][a-z0-9._-]*\.json$/i.test(value);
+const localBookURL = (book, file) => `data/songbooks/${encodeURIComponent(book.directory)}/${encodeURIComponent(file)}`;
+
+async function fetchJSON(url, label) {
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`${label} (${response.status})`);
+  return response.json();
+}
+
+function hasLines(lines) {
+  return Array.isArray(lines) && lines.some(line => typeof line === 'string' && line.trim());
+}
+
+function songSearchText(song) {
+  const lyricLines = getSongSections(song).flatMap(section => section.lines);
+  return normalize([song.number, song.title, lyricLines.join(' '), ...(song.search?.keywords || [])].join(' '));
+}
+
+async function loadBookMetadata(entry) {
+  const data = await fetchJSON(localBookURL(entry, entry.metadata || 'metadata.json'), `metadata for ${entry.id}`);
+  validateBookMetadata(data, entry);
+  return {
+    ...entry,
+    ...data,
+    coverImage: data.cover?.image || '',
+    coverImageAlt: data.cover?.alt || `Cover of ${data.title}`,
+    songCount: Number.isInteger(entry.songCount) ? entry.songCount : data.songs?.count,
+    updatedAt: data.songs?.updatedAt || '—'
+  };
+}
+
+async function loadSongsForBook(book) {
+  if (bookSongCache.has(book.id)) return bookSongCache.get(book.id);
+  const externalURL = book.songs?.url?.trim();
+  const sourceURL = externalURL || localBookURL(book, book.songs?.file || 'songs.json');
+  const versionedURL = externalURL ? sourceURL : `${sourceURL}?v=${encodeURIComponent(book.songs?.updatedAt || book.version || 'latest')}`;
+  const data = await fetchJSON(versionedURL, `songs for ${book.title}`);
+  validateSongsData(data, book);
+  const result = {
+    songs: [...data.songs].sort((a, b) => a.number - b.number),
+    sourceURL,
+    updatedAt: data.updatedAt || book.updatedAt
+  };
+  bookSongCache.set(book.id, result);
+  return result;
+}
+
+export async function loadLibrary() {
+  if (library) return library;
+  const data = await fetchJSON(LIBRARY_URL, 'songbook library');
+  validateLibrary(data);
+  const books = await Promise.all(data.books.map(loadBookMetadata));
+  library = { ...data, books };
+  return library;
+}
+
+export async function loadBook(bookId) {
+  const currentLibrary = await loadLibrary();
+  const selected = currentLibrary.books.find(book => book.id === bookId) || currentLibrary.books[0];
+  if (!selected) throw new Error('no songbooks configured');
+  if (activeBook?.id === selected.id && records.length) return records;
+
+  const data = await loadSongsForBook(selected);
+  records = data.songs;
+  activeBook = {
+    ...selected,
+    songCount: records.length,
+    updatedAt: data.updatedAt,
+    sourceURL: data.sourceURL
+  };
+  searchIndex = records.map(song => ({ song, searchableText: songSearchText(song) }));
   return records;
 }
-export function validateData(data) {
-  if (!data || !Array.isArray(data.hymns)) throw new Error('schema');
-  const ids = new Set(),
-    numbers = new Set();
-  for (const hymn of data.hymns) {
-    if (!hymn.id || ids.has(hymn.id) || !Number.isInteger(hymn.number) || numbers.has(hymn.number) || !hymn.title || !Array.isArray(hymn.content?.lines) || !hymn.content.lines.some(Boolean)) throw new Error(`invalid hymn ${hymn.number||'record'}`);
-    ids.add(hymn.id);
-    numbers.add(hymn.number);
+
+export function validateLibrary(data) {
+  if (!data || data.schemaVersion !== '2.0' || !Array.isArray(data.books) || !data.books.length) throw new Error('invalid songbook library');
+  const ids = new Set();
+  data.books.forEach(entry => {
+    if (!entry || !safeDirectory(entry.id) || !safeDirectory(entry.directory) || entry.id !== entry.directory || !safeFile(entry.metadata || 'metadata.json') || ids.has(entry.id)) {
+      throw new Error('invalid or duplicate songbook entry');
+    }
+    ids.add(entry.id);
+  });
+}
+
+export function validateBookMetadata(data, entry) {
+  if (!data || data.schemaVersion !== '1.0' || data.id !== entry.id || data.name !== entry.id || !data.title || !data.intro?.summary || !data.credits?.editor || !data.songs || (!safeFile(data.songs.file || '') && !data.songs.url?.trim())) {
+    throw new Error(`invalid metadata for ${entry.id}`);
   }
 }
+
+export function validateSongsData(data, book) {
+  if (!data || data.schemaVersion !== '1.0' || typeof data.contentVersion !== 'string' || !Array.isArray(data.songs)) throw new Error(`invalid songs for ${book.id}`);
+  const ids = new Set();
+  const numbers = new Set();
+  data.songs.forEach(song => {
+    const sections = song.content?.sections;
+    const validSections = Array.isArray(sections) && sections.some(section => hasLines(section?.lines));
+    if (!song.id || ids.has(song.id) || !Number.isInteger(song.number) || song.number < 1 || numbers.has(song.number) || !song.title || (!hasLines(song.content?.lines) && !validSections)) {
+      throw new Error(`invalid song in ${book.id}`);
+    }
+    ids.add(song.id);
+    numbers.add(song.number);
+  });
+}
+
+function groupLegacyLines(lines) {
+  const groups = [];
+  let group = [];
+  lines.forEach(line => {
+    if (String(line).trim()) group.push(String(line));
+    else if (group.length) {
+      groups.push(group);
+      group = [];
+    }
+  });
+  if (group.length) groups.push(group);
+  return groups;
+}
+
+/** Return display-ready lyric groups for both modern and legacy source records. */
+export function getSongSections(song) {
+  const sections = song?.content?.sections;
+  if (Array.isArray(sections) && sections.some(section => hasLines(section?.lines))) {
+    return sections
+      .filter(section => hasLines(section?.lines))
+      .map(section => ({
+        type: section.type || 'verse',
+        label: section.label || '',
+        lines: section.lines.map(line => String(line))
+      }));
+  }
+
+  const rawLines = (song?.content?.lines || []).map(line => String(line));
+  const firstVerseIndex = rawLines.findIndex(line => /^\s*1[.)]\s+\S/.test(line));
+  const candidateDetails = firstVerseIndex > 0 ? rawLines.slice(0, firstVerseIndex).filter(line => line.trim()) : [];
+  const hasSongDetails = candidateDetails.some(line => /\bdoh hei\b|\bref\.?|\bchorus\b|\brefrain\b|\b\d+\.\d+\b/i.test(line));
+  const details = hasSongDetails ? candidateDetails : [];
+  const groups = groupLegacyLines(hasSongDetails ? rawLines.slice(firstVerseIndex) : rawLines);
+  const hasRefrain = details.some(line => /\bref\.?|\bchorus\b|\brefrain\b/i.test(line));
+  const result = details.length ? [{ type: 'frontmatter', label: 'Song details', lines: details }] : [];
+  let nextVerse = 1;
+  let sawVerse = false;
+  let inferredRefrain = false;
+
+  groups.forEach(lines => {
+    const firstLine = lines.find(line => line.trim()) || '';
+    const verseMatch = firstLine.match(/^\s*(?:verse\s*)?(\d+)\s*[.)]\s+\S/i);
+    const explicitRefrain = /^\s*(?:chorus|refrain|ref\.?)\s*[:.\-]?/i.test(firstLine);
+    const attribution = /^\s*(?:ph\.|words?:|text:|tune:|music:|by\s)/i.test(firstLine);
+    let type = 'verse';
+    let label = '';
+
+    if (attribution) {
+      type = 'attribution';
+      label = 'Source note';
+    } else if (explicitRefrain || (hasRefrain && sawVerse && !inferredRefrain && !verseMatch)) {
+      type = 'chorus';
+      label = explicitRefrain ? 'Chorus / refrain' : 'Refrain';
+      inferredRefrain = true;
+    } else if (verseMatch) {
+      const number = Number(verseMatch[1]);
+      type = 'verse';
+      label = `Verse ${number}`;
+      nextVerse = number + 1;
+      sawVerse = true;
+    } else {
+      label = `Verse ${nextVerse}`;
+      nextVerse += 1;
+      sawVerse = true;
+    }
+    result.push({ type, label, lines });
+  });
+  return result;
+}
+
+export const getLibrary = () => library;
+export const getBooks = () => library?.books || [];
+export const getActiveBook = () => activeBook;
 export const getAllHymns = () => records;
-export const getHymnByNumber = number => records.find(hymn => hymn.number === Number(number));
-export const getHymnById = id => records.find(hymn => hymn.id === id);
-export const getPreviousHymn = hymn => records[records.indexOf(hymn) - 1];
-export const getNextHymn = hymn => records[records.indexOf(hymn) + 1];
-export const buildHymnURL = hymn => `hymn.html?number=${encodeURIComponent(hymn.number)}`;
+export const getHymnByNumber = number => records.find(song => song.number === Number(number));
+export const getHymnById = id => records.find(song => song.id === id);
+export const getPreviousHymn = song => records[records.indexOf(song) - 1];
+export const getNextHymn = song => records[records.indexOf(song) + 1];
+export const getRecordKey = song => `${activeBook?.id || 'unknown'}:${song.id}`;
+export const buildBookURL = book => `book.html?book=${encodeURIComponent(book.id)}`;
+export const buildHymnURL = (song, book = activeBook) => `hymn.html?book=${encodeURIComponent(book?.id || '')}&number=${encodeURIComponent(song.number)}`;
+
 export function searchHymns(query) {
   const needle = normalize(query);
   if (!needle) return [];
-  return searchIndex.filter(item => item.searchableText.includes(needle)).map(item => item.hymn);
+  return searchIndex.filter(item => item.searchableText.includes(needle)).map(item => item.song);
+}
+
+/** Search the full library, loading each book only once during the current page visit. */
+export async function searchAcrossBooks(query) {
+  const needle = normalize(query);
+  if (!needle) return [];
+  const settled = await Promise.allSettled(getBooks().map(async book => ({ book, ...(await loadSongsForBook(book)) })));
+  const sources = settled.filter(result => result.status === 'fulfilled').map(result => result.value);
+  return sources.flatMap(({ book, songs }) => songs
+    .filter(song => songSearchText(song).includes(needle))
+    .map(song => ({ book, song })));
+}
+
+export function getHymnsAlphabetically() {
+  return [...records].sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base', numeric: true }) || a.number - b.number);
 }

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rongmeihymnal.app/schemas/songs.schema.json",
+  "title": "Rongmei Hymnal songs source",
+  "type": "object",
+  "required": ["schemaVersion", "contentVersion", "updatedAt", "songs"],
+  "properties": {
+    "schemaVersion": {"const": "1.0"},
+    "contentVersion": {"type": "string", "minLength": 1},
+    "updatedAt": {"type": "string", "minLength": 1},
+    "songs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "number", "title", "content"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "number": {"type": "integer", "minimum": 1},
+          "title": {"type": "string", "minLength": 1},
+          "content": {
+            "type": "object",
+            "anyOf": [
+              {"required": ["lines"], "properties": {"lines": {"type": "array", "minItems": 1, "items": {"type": "string"}}}},
+              {"required": ["sections"], "properties": {"sections": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["lines"], "properties": {"type": {"type": "string"}, "label": {"type": "string"}, "lines": {"type": "array", "minItems": 1, "items": {"type": "string"}}}}}}}
+            ]
+          }
+        }
+      }
+    }
+  }
+}

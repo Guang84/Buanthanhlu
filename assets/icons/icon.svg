@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Rongmei Hymnal</title>
+  <desc id="desc">An open hymn book with the letters RH.</desc>
+  <rect width="512" height="512" rx="104" fill="#23483f"/>
+  <path d="M83 130c57-22 111-15 173 25v244c-62-40-116-47-173-25V130Zm346 0c-57-22-111-15-173 25v244c62-40 116-47 173-25V130Z" fill="#f4f0e8"/>
+  <path d="M256 155v244M107 168c49-12 92-2 126 26m172-26c-49-12-92-2-126 26" fill="none" stroke="#b65e3e" stroke-linecap="round" stroke-width="17"/>
+  <text x="256" y="306" fill="#23483f" font-family="Georgia, serif" font-size="78" font-weight="700" text-anchor="middle">RH</text>
+</svg>

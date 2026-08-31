@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "2.0",
+  "library": {
+    "name": "Rongmei Hymnal",
+    "eyebrow": "A digital library for singing communities",
+    "title": "Rongmei songs, gathered for every generation.",
+    "intro": "Explore Rongmei gospel songbooks in a simple digital library made for worship, learning, and singing together. Search across the collection or open a book and read each song in a clear, focused view.",
+    "heroImage": "assets/Rongmei Gospel song books.png",
+    "heroImageAlt": "Illustration for Rongmei Hymnal",
+    "about": "Rongmei Hymnal helps preserve and share the songs that carry faith, language, and community memory. Each songbook remains a distinct, carefully credited collection, with its editorial, publication, source, and rights information kept alongside the songs."
+  },
+  "books": [
+    {
+      "id": "buanthanhlu",
+      "directory": "buanthanhlu",
+      "metadata": "metadata.json",
+      "version": "2.1.0",
+      "songCount": 305
+    },
+    {
+      "id": "gospel-songs",
+      "directory": "gospel-songs",
+      "metadata": "metadata.json",
+      "version": "1.1.0",
+      "songCount": 2
+    }
+  ]
+}
