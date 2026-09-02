@@ -54,4 +54,4 @@ See [Project Documentation](docs/PROJECT_DOCUMENTATION.md) for the architecture,
 
 ## Rights
 
-The MIT License applies to the project software, interface, tools, and documentation only. Song lyrics, editions, arrangements, cover art, and other content remain subject to their respective owners' rights. See [LICENSE](LICENSE) and the [Usage Policy](policy.html).
+The Apache License 2.0 License applies to the project software, interface, tools, and documentation only. Song lyrics, editions, arrangements, cover art, and other content remain subject to their respective owners' rights. See [LICENSE](LICENSE) and the [Usage Policy](policy.html).
